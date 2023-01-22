@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .utils.tools import wait_for_text, wait_for_class, wait_for_element, fill_text_input, pick_select_input, mark_checkbox_input
-from .utils.generator import CustomerInfo, ItemInfo, ShippingInfo
+from .utils.generator import ItemInfo, ShippingInfo, Order
 
 
 def go_to_login_page(driver: webdriver) -> None:
@@ -251,14 +251,12 @@ def fill_payment_page(driver: webdriver):
     place_order_button.click()
 
 
-def validate_order(driver: webdriver, customer_info: CustomerInfo, shipping_info: ShippingInfo, items_info_list: list[ItemInfo]) -> None:
+def validate_order(driver: webdriver, number_of_items: int) -> Order:
     order_success_selector = '//*[@id="app"]/div/main/div/div[1]/div/h3'
     WebDriverWait(driver, 10).until(wait_for_element(order_success_selector))
 
     contact_information_email = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[1]/div/div/div[2]/div[1]/div[1]/div[2]').text
-
-    print(f"Contact information email: {contact_information_email}")
 
     shipping_full_name = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[1]/div/div/div[2]/div[1]/div[2]/div[2]/div/div[1]').text
@@ -277,47 +275,15 @@ def validate_order(driver: webdriver, customer_info: CustomerInfo, shipping_info
     shipping_phone = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[1]/div/div/div[2]/div[1]/div[2]/div[2]/div/div[4]').text
 
-    print(f"Shipping full name: {shipping_full_name}")
-    print(f"Shipping address: {shipping_address}")
-    print(f"Shipping postcode: {shipping_postcode}")
-    print(f"Shipping city: {shipping_city}")
-    print(f"Shipping province: {shipping_province}")
-    print(f"Shipping country: {shipping_country}")
-    print(f"Shipping phone: {shipping_phone}")
-
-    item_1_name = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[1]/td[2]/div/div[1]/span').text
-    item_1_qty = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[1]/td[1]/div/span').text
-    item_1_subtotal = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[1]/td[3]/span').text
-
-    item_2_name = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[2]/td[2]/div/div[1]/span').text
-    item_2_qty = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[2]/td[1]/div/span').text
-    item_2_subtotal = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[2]/td[3]/span').text
-
-    item_3_name = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[3]/td[2]/div/div[1]/span').text
-    item_3_qty = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[3]/td[1]/div/span').text
-    item_3_subtotal = driver.find_element(
-        By.XPATH, '//*[@id="summary-items"]/table/tbody/tr[3]/td[3]/span').text
-
-    print(f"Items list size: {len(items_info_list)}")
-    print(f"Item 1 name: {item_1_name}")
-    print(f"Item 1 qty: {item_1_qty}")
-    print(f"Item 1 subtotal: {item_1_subtotal}")
-
-    print(f"Item 2 name: {item_2_name}")
-    print(f"Item 2 qty: {item_2_qty}")
-    print(f"Item 2 subtotal: {item_2_subtotal}")
-
-    print(f"Item 3 name: {item_3_name}")
-    print(f"Item 3 qty: {item_3_qty}")
-    print(f"Item 3 subtotal: {item_3_subtotal}")
+    items_info: list[ItemInfo] = []
+    for i in range(1, number_of_items + 1):
+        item_name = driver.find_element(
+            By.XPATH, f'//*[@id="summary-items"]/table/tbody/tr[{i}]/td[2]/div/div[1]/span').text
+        item_qty = driver.find_element(
+            By.XPATH, f'//*[@id="summary-items"]/table/tbody/tr[{i}]/td[1]/div/span').text
+        item_subtotal = driver.find_element(
+            By.XPATH, f'//*[@id="summary-items"]/table/tbody/tr[{i}]/td[3]/span').text
+        items_info.append(ItemInfo(item_name, item_qty, item_subtotal))
 
     order_qty_raw = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[1]').text
@@ -325,5 +291,18 @@ def validate_order(driver: webdriver, customer_info: CustomerInfo, shipping_info
     order_total = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[4]/div/div[2]').text
 
-    print(f"Order qty: {order_qty}")
-    print(f"Order total: {order_total}")
+    return Order(
+        email=contact_information_email,
+        shipping_info=ShippingInfo(
+            full_name=shipping_full_name,
+            address=shipping_address,
+            postcode=shipping_postcode,
+            city=shipping_city,
+            telephone=shipping_phone,
+            # province=shipping_province,
+            # country=shipping_country,
+        ),
+        items_info=items_info,
+        qty=order_qty,
+        total=order_total,
+    )

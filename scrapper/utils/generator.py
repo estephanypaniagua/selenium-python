@@ -27,6 +27,15 @@ class ShippingInfo:
     postcode: str
 
 
+@dataclass
+class Order:
+    email: str
+    shipping_info: ShippingInfo
+    items_info: list[ItemInfo]
+    qty: int
+    total: str
+
+
 def get_customer_info() -> CustomerInfo:
     fake = Faker()
     return CustomerInfo(name=fake.name(), email=fake.email(), password=fake.password())

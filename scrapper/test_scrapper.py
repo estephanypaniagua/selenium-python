@@ -5,7 +5,7 @@ from .utils.driver import get_chrome_driver
 from .utils.generator import get_customer_info, get_shipping_info
 
 
-def main():
+def test_scrapper():
     home_page = "https://demo.evershop.io"
     driver = get_chrome_driver()
     driver.get(home_page)
@@ -33,6 +33,18 @@ def main():
     sleep(2)
 
     order = validate_order(driver, number_of_items=len(items_info_list))
-    print(order)
+
+    assert order.email == customer_info.email
+    assert order.shipping_info.full_name == shipping_info.full_name
+    assert order.shipping_info.address == shipping_info.address
+    assert order.shipping_info.city == shipping_info.city
+    assert order.shipping_info.state == shipping_info.state
+    assert order.shipping_info.zip_code == shipping_info.zip_code
+    assert order.shipping_info.country == shipping_info.country
+    assert order.shipping_info.phone == shipping_info.phone
+
+    for item_original, item_result in zip(items_info_list, order.items_info):
+        assert item_original.name == item_result.name
+        assert item_original.quantity == item_result.quantity
 
     driver.quit()
