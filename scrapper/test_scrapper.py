@@ -36,15 +36,16 @@ def test_scrapper():
 
     assert order.email == customer_info.email
     assert order.shipping_info.full_name == shipping_info.full_name
+    assert order.shipping_info.telephone == shipping_info.telephone
     assert order.shipping_info.address == shipping_info.address
     assert order.shipping_info.city == shipping_info.city
-    assert order.shipping_info.state == shipping_info.state
-    assert order.shipping_info.zip_code == shipping_info.zip_code
-    assert order.shipping_info.country == shipping_info.country
-    assert order.shipping_info.phone == shipping_info.phone
+    assert order.shipping_info.postcode == shipping_info.postcode
 
-    for item_original, item_result in zip(items_info_list, order.items_info):
+    items_original = sorted(items_info_list, key=lambda item: item.name)
+    items_returned = sorted(order.items_info, key=lambda item: item.name)
+
+    for item_original, item_result in zip(items_original, items_returned):
         assert item_original.name == item_result.name
-        assert item_original.quantity == item_result.quantity
+        assert item_original.qty == item_result.qty
 
     driver.quit()

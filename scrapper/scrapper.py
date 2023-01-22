@@ -283,7 +283,7 @@ def validate_order(driver: webdriver, number_of_items: int) -> Order:
             By.XPATH, f'//*[@id="summary-items"]/table/tbody/tr[{i}]/td[1]/div/span').text
         item_subtotal = driver.find_element(
             By.XPATH, f'//*[@id="summary-items"]/table/tbody/tr[{i}]/td[3]/span').text
-        items_info.append(ItemInfo(item_name, item_qty, item_subtotal))
+        items_info.append(ItemInfo(item_name, int(item_qty), item_subtotal))
 
     order_qty_raw = driver.find_element(
         By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[1]').text
