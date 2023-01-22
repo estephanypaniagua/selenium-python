@@ -10,19 +10,21 @@ def main():
     driver = get_chrome_driver()
     driver.get(home_page)
 
-    customer = get_customer_info()
-    print(customer)
+    customer_info = get_customer_info()
+    print(customer_info)
     shipping_info = get_shipping_info()
     print(shipping_info)
 
     go_to_login_page(driver)
-    sign_up(driver, customer.name, customer.email, customer.password)
+    sign_up(driver,
+            customer_info.name, customer_info.email, customer_info.password)
     # sign_in(driver, "xrobinson@example.net", "63$ImmTc&K")
 
     sleep(2)
 
     go_to_shopping_page(driver)
-    add_items_to_cart(driver, 2)
+    items_info_list = add_items_to_cart(driver, 3)
+    print(items_info_list)
 
     go_to_checkout_page(driver)
     fill_checkout_page(driver, shipping_info)
@@ -30,6 +32,6 @@ def main():
 
     sleep(2)
 
-    validate_order(driver)
+    validate_order(driver, customer_info, shipping_info, items_info_list)
 
-    driver.close()
+    driver.quit()

@@ -1,12 +1,21 @@
 from dataclasses import dataclass
 from faker import Faker
+from typing import Optional
 
 
 @dataclass
-class Customer:
+class CustomerInfo:
     name: str
     email: str
     password: str
+
+
+@dataclass
+class ItemInfo:
+    name: str
+    qty: int
+    unit_price: Optional[int] = None
+    subtotal: Optional[int] = None
 
 
 @dataclass
@@ -18,9 +27,9 @@ class ShippingInfo:
     postcode: str
 
 
-def get_customer_info() -> Customer:
+def get_customer_info() -> CustomerInfo:
     fake = Faker()
-    return Customer(name=fake.name(), email=fake.email(), password=fake.password())
+    return CustomerInfo(name=fake.name(), email=fake.email(), password=fake.password())
 
 
 def get_shipping_info() -> ShippingInfo:
