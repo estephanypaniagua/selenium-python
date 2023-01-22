@@ -22,6 +22,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
 
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: beta
+      - run: chrome --version
+
       - name: Install requirements
         run: |
           pip install -r requirements.txt
