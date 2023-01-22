@@ -4,8 +4,8 @@ from .scrapper import go_to_login_page, sign_up, sign_in, go_to_shopping_page, a
 from .utils.driver import get_chrome_driver
 from .utils.generator import get_customer_info, get_shipping_info
 
-
-def test_scrapper():
+# This test is going to sign up a new user, add items to cart, fill the checkout page and validate the order.
+def test_buy_products():
     home_page = "https://demo.evershop.io"
     driver = get_chrome_driver()
     driver.get(home_page)
@@ -18,7 +18,6 @@ def test_scrapper():
     go_to_login_page(driver)
     sign_up(driver,
             customer_info.name, customer_info.email, customer_info.password)
-    # sign_in(driver, "xrobinson@example.net", "63$ImmTc&K")
 
     sleep(2)
 
