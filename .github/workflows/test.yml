@@ -25,13 +25,9 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Removing previous chrome instances on runner
-        run: sudo apt purge google-chrome-stable
-
-      - name: Install requirements and all needed
+      - name: Install requirements
         run: |
           pip install -r requirements.txt
-          pip install chromedriver-autoinstaller
 
       - name: Run tests
         run: |
