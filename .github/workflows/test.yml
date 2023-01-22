@@ -25,6 +25,9 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
+      - name: Install chrome driver
+        uses: nanasess/setup-chromedriver@v1
+
       - name: Install requirements
         run: |
           pip install -r requirements.txt
