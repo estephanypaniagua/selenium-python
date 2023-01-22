@@ -41,7 +41,7 @@ This project covers the following scenarios and practices:
 
 ## Pre-requisites
 
-1. [Python >= 3](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
+1. [Python >= 3](https://www.python.org/downloads/).
 2. Libraries obtained since requirements
 
 ## Project Setup since Linux machine
