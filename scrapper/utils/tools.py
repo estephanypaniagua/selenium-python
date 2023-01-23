@@ -49,13 +49,13 @@ def wait_for_element(xpath: str) -> str:
     return EC.visibility_of_element_located((By.XPATH, xpath))
 
 
-def fill_text_input(driver: webdriver, xpath: str, text: str) -> None:
-    input = driver.find_element(By.XPATH, xpath)
+def fill_text_input(driver: webdriver, name: str, text: str) -> None:
+    input = driver.find_element(By.NAME, name)
     input.send_keys(text)
 
 
-def pick_select_input(driver: webdriver, xpath: str) -> None:
-    select = Select(driver.find_element(By.XPATH, xpath))
+def pick_select_input(driver: webdriver, name: str) -> None:
+    select = Select(driver.find_element(By.NAME, name))
     select.options[1].click()
 
 

@@ -12,7 +12,6 @@ from .utils.generator import ItemInfo, ShippingInfo, Order
 
 def go_to_login_page(driver: webdriver) -> None:
     # Find login button and click
-    login_button_selector = "#app > div > div.header.flex.justify-between > div.icon-wrapper.flex.justify-between.space-x-1 > div:nth-child(2) > a"
     login_button_selector = '//*[@id="app"]/div/div[1]/div[3]/div[2]/a'
     login_button = driver.find_element(By.XPATH, login_button_selector)
     login_button.click()
@@ -40,9 +39,8 @@ def sign_in(driver: webdriver, email: str, password: str) -> None:
 
 def sign_up(driver: webdriver, name: str, email: str, password: str) -> None:
     # Go to sign up page
-    create_account_link_selector = '//*[@id="app"]/div/main/div/div/div/a'
     create_account_link = driver.find_element(
-        By.XPATH, create_account_link_selector)
+        By.LINK_TEXT, "Create an account")
     create_account_link.click()
 
     # Wait for "Create A New Account" text to load
@@ -51,13 +49,10 @@ def sign_up(driver: webdriver, name: str, email: str, password: str) -> None:
     WebDriverWait(driver, 10).until(wait_for_text(title_selector, title_text))
 
     # Find login form elements
-    full_name_input_selector = '//*[@id="loginForm"]/div[1]/div/input'
-    email_input_selector = '//*[@id="loginForm"]/div[2]/div/input'
-    pass_input_selector = '//*[@id="loginForm"]/div[3]/div/input'
     sign_up_button_selector = '//*[@id="loginForm"]/div[4]/button'
-    full_name_input = driver.find_element(By.XPATH, full_name_input_selector)
-    email_input = driver.find_element(By.XPATH, email_input_selector)
-    pass_input = driver.find_element(By.XPATH, pass_input_selector)
+    full_name_input = driver.find_element(By.NAME, "full_name")
+    email_input = driver.find_element(By.NAME, "email")
+    pass_input = driver.find_element(By.NAME, "password")   
     sign_up_button = driver.find_element(By.XPATH, sign_up_button_selector)
 
     # Fill in login form and submit
@@ -66,6 +61,7 @@ def sign_up(driver: webdriver, name: str, email: str, password: str) -> None:
     pass_input.send_keys(password)
     sign_up_button.click()
 
+    # login_button = driver.find_element(By.LINK_TEXT, "SHOP NOW")
 
 def go_to_shopping_page(driver: webdriver) -> None:
     # Find shopping button and click
@@ -170,24 +166,16 @@ def go_to_checkout_page(driver: webdriver):
 
 
 def fill_checkout_page(driver: webdriver, shipping_info: ShippingInfo):
-    fill_text_input(driver,
-                    '//input[@name="address[full_name]"]', shipping_info.full_name)
-    fill_text_input(driver,
-                    '//input[@name="address[telephone]"]', shipping_info.telephone)
-    fill_text_input(driver,
-                    '//input[@name="address[address_1]"]', shipping_info.address)
-    fill_text_input(driver,
-                    '//input[@name="address[city]"]', shipping_info.city)
-    pick_select_input(driver,
-                      '//select[@name="address[country]"]')
-    pick_select_input(driver,
-                      '//select[@name="address[province]"]')
-    fill_text_input(driver,
-                    '//input[@name="address[postcode]"]', shipping_info.postcode)
+    fill_text_input(driver, 'address[full_name]', shipping_info.full_name)
+    fill_text_input(driver, 'address[telephone]', shipping_info.telephone)
+    fill_text_input(driver, 'address[address_1]', shipping_info.address)
+    fill_text_input(driver, 'address[city]', shipping_info.city)
+    pick_select_input(driver, 'address[country]')
+    pick_select_input(driver, 'address[province]')
+    fill_text_input(driver, 'address[postcode]', shipping_info.postcode)
     sleep(2)
 
-    mark_checkbox_input(driver,
-                        '//label[@for="method0"]')
+    mark_checkbox_input(driver, '//label[@for="method0"]')
 
     sleep(1)
 
