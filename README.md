@@ -34,6 +34,7 @@ This project covers the following scenarios and practices:
 │      └── __init__.py
 │      └── scrapper.py
 │      └── test_buy_products.py
+└── screenshots
 └── .gitignore
 └── README.md
 └── requirements.txt
@@ -56,3 +57,4 @@ pip install -r requirements.txt
 # run test and generate report
 pytest --html-report=./report/index.html
 ```
+4. See the report in the `report` folder and screenshots in the `screenshots` folder

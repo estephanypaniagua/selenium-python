@@ -16,18 +16,24 @@ def test_buy_products():
     print(shipping_info)
 
     go_to_login_page(driver)
+    driver.save_screenshot('./screenshots/login.png')
     sign_up(driver,
             customer_info.name, customer_info.email, customer_info.password)
+    driver.save_screenshot('./screenshots/sign_up.png')
 
     sleep(2)
 
     go_to_shopping_page(driver)
+    driver.save_screenshot('./screenshots/shopping.png')
     items_info_list = add_items_to_cart(driver, 3)
     print(items_info_list)
 
     go_to_checkout_page(driver)
+    driver.save_screenshot('./screenshots/go_to_checkout.png')
     fill_checkout_page(driver, shipping_info)
+    driver.save_screenshot('./screenshots/fill_checkout.png')
     fill_payment_page(driver)
+    driver.save_screenshot('./screenshots/payment.png')
 
     sleep(2)
 
